@@ -1,0 +1,118 @@
+Use SCP to Get/Put File across Remote Server : Install the SCP library  [ https://pypi.python.org/pypi/robotframework-scplibrary ]
+
+pip install robotframework-scplibrary
+
+
+Connection:
+
+Before files can be transferred a connection to remote machine must first be made. 
+A connection can be made with the Open Connection keyword. 
+Both normal username/password authentication and asymmetric key-pair authentication may be used.
+
+Connections should be closed using the Close Connection when they are no longer in use.
+
+
+File transfer:
+
+Files and directories can be uploaded to the remote machine using the Put File or Put Directory keywords or 
+downloaded to the local machine using the Get File keyword.
+
+A connection must be made using the Open Connection keyword before file transfers may be made.
+
+Now since SCP is not built in, we would need to import the SCP package installed to do this import.
+
+SYNTAX :
+Import Library 	MyLibrary 	  	  	 
+Import Library 	${CURDIR}/../Library.py 	arg1 	named=arg2 	 
+Import Library 	${LIBRARIES}/Lib.java 	arg 	WITH NAME 	JavaLib
+
+ 
+
+Let's do some example :
+
+Use SSH to connect and import SCP package library for file transfer
+
+ 
+
+1. Create the Robot test file
+
+*** Settings ***
+Documentation          SCP file Copy usage example
+Library                SSHLibrary
+Library                OperatingSystem
+Suite Setup            Open Connection And Log In
+Test Teardown          Close All Connections
+
+*** Variables ***
+${HOST_IP}       xx.xx.x.xx 
+${USERNAME}      root
+${PASSWORD}      password 
+
+*** TestCases ***
+SCP-FILE-TO-REMOTE-SERVER
+    Copy-File-To-Remote-Server
+    # Just for Checking if file is copied
+    ${output}     Execute Command      hostname && ls -lart /tmp/test_file.txt
+    Log To Console    ${output}
+
+SCP-FILE-FROM-REMOTE-SERVER
+    Copy-File-From-Remote-Server
+    # Just for Checking if file is copied
+    ${output}     Run      hostname && ls -lart ${CURDIR}
+    Log To Console    ${output}
+
+*** Keywords ***
+Open Connection And Log In
+    Log To Console      \n "Open Connection And Log In"
+    Open connection     ${HOST_IP}
+    Login   ${USERNAME}    ${PASSWORD}
+
+Copy-File-To-Remote-Server
+    Log To Console      \n "Copy-File-To-Remote-Server : test_file.txt"
+    Import Library      SCPLibrary      WITH NAME       scp
+    scp.Open connection     ${HOST_IP}     username=${USERNAME}      password=${PASSWORD}
+    scp.Put File    test_file.txt   /tmp
+
+Copy-File-From-Remote-Server
+    Log To Console     \n "Copy-File-From-Remote-Server : File-From-Server.txt "
+    Import Library      SCPLibrary      WITH NAME       scp
+    scp.Open connection     ${HOST_IP}     username=${USERNAME}      password=${PASSWORD}
+
+    # Get File from server to current directory
+    scp.Get File    /root/File-From-Server.txt   ${CURDIR}
+
+ 
+
+2. Execute the Test
+
+ 
+$ robot test.robot
+==============================================================================
+Test :: SCP file Copy usage example                                           
+==============================================================================
+
+"Open Connection And Log In"
+SCP-FILE-TO-REMOTE-SERVER                                             
+"Copy-File-To-Remote-Server : test_file.txt"
+..xx.xx.xx.xx
+-rw-r--r-- 1 root root 0 Nov 29 02:41 /tmp/test_file.txt
+SCP-FILE-TO-REMOTE-SERVER                                             | PASS |
+------------------------------------------------------------------------------
+SCP-FILE-FROM-REMOTE-SERVER                                           
+"Copy-File-From-Remote-Server : File-From-Server.txt "
+..ubuntu
+total 424
+drwxrwxr-x 20 rango rango   4096 May 23 08:46 ..
+-rw-rw-r--  1 rango rango      0 May 23 09:17 test_file.txt
+-rw-rw-r--  1 rango rango 207687 May 23 09:43 log.html
+-rw-rw-r--  1 rango rango 211041 May 23 09:43 report.html
+-rwxrwxr-x  1 rango rango   1583 May 23 09:44 test.robot
+drwxrwxr-x  2 rango rango   4096 May 23 09:44 .
+-rw-rw-r--  1 rango rango      0 May 23 09:44 output.xml
+-rw-r--r--  1 rango rango      0 May 23 09:44 File-From-Server.txt
+SCP-FILE-FROM-REMOTE-SERVER                                           | PASS |
+------------------------------------------------------------------------------
+Test :: SCP file Copy usage example                                   | PASS |
+2 critical tests, 2 passed, 0 failed
+2 tests total, 2 passed, 0 failed
+==============================================================================

@@ -1,0 +1,55 @@
+JSON (canonically pronounced /ˈdʒeɪsən/ JAY-sən; sometimes JavaScript Object Notation) is an open-standard format that uses human-readable text to transmit data objects consisting of attribute–value pairs.
+
+Refer:
+
+https://en.wikipedia.org/wiki/JSON    
+
+http://www.w3schools.com/json/
+
+http://json.org/example.html
+
+
+1. Create a File for JSON and with data as bellow the key pairs like in python dictionary format
+
+File Name : name.json
+
+{
+    "firstname": "George",
+    "lastname": "Keishing"
+}
+
+
+2. Create the test robot code
+
+*** Settings ***
+Library   OperatingSystem
+
+*** Test Cases ***
+Load JSON
+    # read the raw data from file
+    ${json}=  Get file    name.json
+
+    # Now convert the data to a python object like in dict
+    ${object}=  Evaluate  json.loads('''${json}''')  json
+
+    # Do stuff
+    Run Keyword If    '${object["firstname"]}' == 'George'        Log To Console    ${object["firstname"]}
+    Run Keyword If    '${object["lastname"]}' == 'Keishing'       Log To Console    ${object["lastname"]}
+
+    Log To Console   The JSON object are : ${object["firstname"]} -and- ${object["lastname"]}
+
+
+   
+3. Execute the robot code
+==============================================================================
+Test                                                                          
+==============================================================================
+Load JSON                                                             ..George
+.Keishing
+.The JSON object are : George -and- Keishing
+Load JSON                                                             | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

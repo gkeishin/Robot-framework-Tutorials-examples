@@ -1,0 +1,28 @@
+ [ Refer Documentation : http://robotframework.org/robotframework/latest/libraries/Telnet.html ]
+
+*** Settings ***
+Library           Telnet  timeout=10
+Library           OperatingSystem
+Suite Setup       Open Connection And Log In
+
+
+*** Variables ***
+${IP_ADDRESS}    AA.BB.CC.DD
+${USER_ID}       UUUUUU
+${PASSWORD}      PPPPPPP
+
+
+*** Test Cases ***
+LoginToRemoteServer
+   [Documentation]   Test to login to remote Sever
+   [Tags]            Execute some commands
+   ${output}=        Execute Command     echo "hello"
+   Log to console    ${output}
+
+
+*** Keywords ***
+Open Connection And Log In
+   Open Connection  ${IP_ADDRESS}
+   #set prompt      prompt=($|#|>)    prompt_is_regexp=true
+   set prompt       prompt=$    prompt_is_regexp=true
+   Login   ${USER_ID}  ${PASSWORD}

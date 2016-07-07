@@ -1,0 +1,71 @@
+This is a very simple demonstration... 
+ 
+1. Lets create a database for this example
+
+rango@ubuntu:~/Desktop/ROBOT/SQL$ sqlite3 name_phone_list
+SQLite version 3.8.2 2013-12-06 14:53:30
+Enter ".help" for instructions
+Enter SQL statements terminated with a ";"
+sqlite>
+sqlite> create table name_tbl(one varchar(20), smallint);
+sqlite> insert into name_tbl values('George Keishing',10000);
+sqlite>
+sqlite> select * from name_tbl;
+George Keishing|10000
+sqlite>
+
+Quit it....
+
+rango@ubuntu:~/Desktop/ROBOT/SQL$ sqlite3 name_phone_list 'select * from name_tbl'
+George Keishing|10000
+
+
+rango@ubuntu:~/Desktop/ROBOT/SQL$ ls -lart name_phone_list
+-rw-r--r-- 1 rango rango 2048 Jun 15 10:05 name_phone_list
+rango@ubuntu:~/Desktop/ROBOT/SQL$
+
+
+Now our small db is ready...
+
+2. Install the database library
+
+This example is a local DB with sqlite and doesn't have mysql setup so using directly through command using sqlite3
+
+Someday I would like to connect to a real DB or set up locally and try this one... but for now HACKS .. :)
+
+sudo pip install robotframework-databaselibrary
+
+http://franz-see.github.io/Robotframework-Database-Library/
+
+Import using
+
+Library  DatabaseLibrary          
+
+ 
+
+3. Lets write the code
+
+***Settings***
+Library   OperatingSystem
+
+***Testcases***
+Fetch from SQL DB
+   ${out} =   Run    sqlite3 name_phone_list 'select * from name_tbl'
+   Log To Console    \n ${out}
+
+ 
+
+4.  Let run the code
+
+$ python -m robot sql.robot
+==============================================================================
+Sql                                                                           
+==============================================================================
+Fetch from SQL DB                                                     .
+George Keishing|10000
+Fetch from SQL DB                                                     | PASS |
+------------------------------------------------------------------------------
+Sql                                                                   | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

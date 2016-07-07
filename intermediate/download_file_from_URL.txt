@@ -1,0 +1,148 @@
+
+Downloading file from URL:
+--------------------------
+
+When you would want to download file from a given URL... If so here is a piece of code for you which you can use on the fly.
+
+There is no direct download file method yet in robot/selenium framework apart from SPC, so we need to work out using python 
+user library in this case as an example. You can choose any implementation deem good for you but here is one.
+
+You can use this piece of code to download any file from packages, files, etc.
+
+For this example lets try to download a file from Robot framework URL  https://github.com/bulkan/robotframework-archivelibrary/blob/master/setup.py
+
+You can implement request method, curl, wget and others.. but here we will use wget to download the file.. wget works better if its a larger file.. 
+It has the capability to continue if failed downloading before completion..
+
+
+1. Lets start with the robot code
+
+*** Settings ***
+
+Library     user_download_lib.py
+
+*** Test Cases ***
+
+Download file from URL
+  Fetch File from URL
+
+
+*** Keywords ***
+
+Fetch File from URL
+  [Documentation]   \n Get the file from URL page
+
+  Log To Console    \n ${URL}
+
+  ${download} =    Download URL File    ${URL_FILE}
+  Log To Console   Downloaded File Size : ${download}
+
+ 
+This keywords "Download URL File" we are going to define in user lib    user_download_lib.py  ..
+
+ 
+
+2. Here is the code for it  [ File name :  user_download_lib.py ]
+
+   
+#!/usr/bin/python
+
+import os
+import re
+import shutil
+import sys, subprocess
+import urllib
+
+class  user_download_lib(object):
+
+    ##########################################################################
+    # Function : Download_URL_File
+    #
+    # @param   i_url_file  : URL with tar name abs path
+    # @return  Returns the size downloaded on the system/Local
+    #
+    # @brief   Get the file from URL using wget/continue method.  
+    #
+    ##########################################################################
+    def Download_URL_File(self, i_url_file):
+        i_file_name = i_url_file.split('/')[-1]
+        print " File Name :", i_file_name.strip()
+
+        download_cmd ='wget  ' + i_url_file
+   
+        status = self.Execute_Download_Cmd(download_cmd)
+        if status == "NOK":
+            download_cont_cmd ='wget -c  ' + i_url_file
+            # Can't do much post this continue failure...
+            status_cont = self.Execute_Download_Cmd(download_cont_cmd)
+ 
+        # Get File downloaded in MB size but return it a as string
+        # file_size = os.path.getsize(i_file_name.strip()) >> 20
+        file_size = os.path.getsize(i_file_name.strip())
+        return  str(file_size)
+
+    ##########################################################################
+    # Function : Execute_Download_Cmd
+    #
+    # @param   i_cmd  : wget command to fetch file
+    # @return  Returns OK on success
+    #          Returns NOK incomplete download
+    #          Returns FATAL on cmd failure or execptions
+    #
+    # @brief   Execute the command
+    #
+    ##########################################################################
+    def Execute_Download_Cmd(self, i_cmd):
+        print " Executing :",i_cmd
+        self.Log_Library(i_cmd)
+
+        try:
+            cmd_out = subprocess.Popen(i_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            output,error = cmd_out.communicate()
+            if (len(error)>1):
+               print "Error downloading:", error
+               self.Log_Library(error)
+               return "NOK"
+            else:
+               print "Download output \n", output
+               # This would be in the log.html
+               self.Log_Library(output)
+        except:
+            self.Log_Library(str(i_cmd))
+            return  "FATAL"
+        return "OK"
+ 
+    ##########################################################################
+    # Function : Log_Library
+    #
+    # @param   i_str  : String input
+    # @return  Returns the string back
+    #
+    # @brief   This logs into the robot output.html file for logs.
+    #
+    ##########################################################################
+    def Log_Library(self,i_str):
+        return i_str
+
+
+        
+3. Lets try it out the code
+
+ 
+
+$ python  -m   robot  -v   URL_FILE:https://github.com/bulkan/robotframework-archivelibrary/blob/master/setup.py   download_url.robot
+==============================================================================
+Download Url                                                                  
+==============================================================================
+Download file from URL                                                
+https://github.com/bulkan/robotframework-archivelibrary/blob/master/setup.py
+Downloaded File Size : 47213
+Download file from URL                                                | PASS |
+------------------------------------------------------------------------------
+Download Url                                                          | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+
+
+cool huh... enjoy!!!

@@ -1,0 +1,75 @@
+Let work on the dictionary but at basic level to understand ...  In Python you must be aware of how dictionary are created and used..
+ 
+Let try to see how we can create dictionary using framework provided library "Collection" vs using python
+
+* Create dictionary using library collections
+SYNTAX :
+  ${dict}=    Create Dictionary  KEY  VALUE
+ 
+  However you will see these WARNING message stating this is not a good way to do..
+ 
+  [ WARN ] Giving keys and values separately to 'Create Dictionary' keyword is deprecated. Use 'key=value' syntax instead.
+ 
+  The reason being this keyword is moved from Collections library to BuiltIn.
+ 
+  Now the correct way to use this keyword would be like this as per the builtin Library documentation
+
+SYNTAX :
+
+     &{dict} =     Create Dictionary     key=value     foo=bar     
+ 
+
+
+Lets try in example :
+
+In this example , we will try some new keywords just for the sake of enlarging the scope of understanding
+
+1. We will use couple of keywords from Collections Library
+
+*** Settings ***
+Library     Collections
+
+2. We will use keywords for checking the dictionary created
+
+    Dictionary should contain item     ${dict}    foo    bar
+ 
+3. You must have used and seen Set Variable ( local and global usage ), there is another one who does a mix of both but -ONLY- in the context of the test suite scope
+     Set Suite Variable       ${dict}
+ 
+4. Lets write the code [ file name : dict.robot ]
+ 
+ *** Settings ***
+Library        Collections
+
+*** Test cases ***
+TestDictInit
+    Dictionary Initialize
+
+    # Notice that this ${dict} variable is set from user keyword and still accessible
+    Run Keyword if    ${dict}['COUNTRY'] == 'IND'      Log To console    \n " Land of Sages"
+
+    # --OR-- Check if an item of key`/value must be found in a dictionary
+    Dictionary should contain item   ${dict}    COUNTRY   IND
+
+*** Keywords ***
+Dictionary Initialize
+    &{dict} =     Create Dictionary     COUNTRY=IND
+
+    # Makes a variable available everywhere within the scope of the current suite
+    Set Suite Variable   ${dict}
+    
+    
+5. Execute the robot code
+
+$ robot dict.robot
+==============================================================================
+Dict                                                                          
+==============================================================================
+TestDictInit                                                          .
+" Land of Sages"
+TestDictInit                                                          | PASS |
+------------------------------------------------------------------------------
+Dict                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
