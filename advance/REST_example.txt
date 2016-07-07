@@ -1,0 +1,48 @@
+Refer : https://github.com/bulkan/robotframework-requests
+
+1.  Install the Required libraries
+
+RequestsLibrary is a Robot Framework test library that uses the Requests HTTP client.
+
+pip install -U requests
+pip install -U robotframework-requests
+
+
+Or via HTTP library
+pip install --upgrade robotframework-httplibrary
+
+ 
+
+2.  Write the code ( sample from https://github.com/peritus/robotframework-httplibrary )
+
+*** Setting  ***
+Library     HttpLibrary.HTTP
+
+*** Test Case ***
+Example
+    [Documentation]     Follows a Redirect
+    # Check the site http://httpstat.us/
+    Create HTTP Context     httpstat.us
+
+    # Code 302  Found
+    GET     /302
+    Response Status Code Should Equal   302
+
+    Follow Response
+    Response Body Should Contain    generating different HTTP codes
+
+ 
+
+3. Execute the test code
+
+$ robot test.robot
+==============================================================================
+Test                                                                          
+==============================================================================
+Example :: Follows a Redirect                                         | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+

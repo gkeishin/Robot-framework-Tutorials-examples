@@ -1,0 +1,69 @@
+Refer : https://github.com/bulkan/robotframework-requests
+
+Library    RequestsLibrary.RequestsKeywords
+
+
+You'll need the following package :
+
+requests (2.10.0)
+pip install -U Requests
+
+robotframework-requests (0.4.5)
+pip install -U robotframework-requests
+
+Once both are installed, we should see something like this
+
+$ ls -lart /usr/local/lib/python2.7/dist-packages/RequestsLibrary/
+total 96
+-rw-r--r--   1 root staff    18 May 24 00:58 version.py
+-rw-r--r--   1 root staff 32223 May 24 00:58 RequestsKeywords.py
+-rw-r--r--   1 root staff   867 May 24 00:58 __init__.py
+-rw-r--r--   1 root staff   180 May 24 00:58 version.pyc
+-rw-r--r--   1 root staff  1247 May 24 00:58 __init__.pyc
+-rw-r--r--   1 root staff 28964 May 24 00:58 RequestsKeywords.pyc
+drwxr-sr-x   2 root staff  4096 May 24 00:58 .
+drwxrwsr-x 136 root staff 12288 Jun 10 08:35 ..
+
+ 
+
+You can use the following code for your automation..
+
+
+In this case we will show to connect to REST server
+
+# The actual IP is not shown but just a dummy data but the o/p is from real run.
+ 
+
+*** Settings ***
+Library           Collections
+Library           String
+Library           RequestsLibrary.RequestsKeywords
+
+*** Variables ****
+${AUTH_URI}    https://127.0.0.1    # Add your REST server IP
+${USERNAME}    root
+${PASSWORD}    password
+${HTTP_OK}     200    # HTTP OK code
+
+*** Test Cases ***
+Login To REST Server
+    Create Session      openconnection      ${AUTH_URI}  timeout=5   max_retries=1
+    Log To Console      ${AUTH_URI}
+    ${headers}=           Create Dictionary   Content-Type=application/json
+    @{credentials} =   Create List     ${USERNAME}      ${PASSWORD}
+    ${data} =    create dictionary     data=@{credentials}
+    ${resp} =    Post Request    openconnection    /login    data=${data}   headers=${headers}
+    should be equal as strings       ${resp.status_code}      ${HTTP_OK}
+
+ 
+
+==============================================================================
+Login                                                                         
+==============================================================================
+Login To REST Server                                          .https://127.0.0.1
+Login To REST Server                                          | PASS |
+------------------------------------------------------------------------------
+Login                                                                 | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

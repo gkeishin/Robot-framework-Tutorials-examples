@@ -1,0 +1,100 @@
+SH and Telnet by default seems to load only the OS ENV and not the custom ENV appended to it..
+
+So in the case you would want to set the ENV from robot code.. here is an example
+
+ 
+
+SYNTAX :
+
+                 From OS Library: OperatingSystem                
+Set Environment Variable 	name, value 	
+
+Sets an environment variable to a specified value.
+
+                 From SSH Library : SSHLibrary
+${rc}= 	Execute Command 	echo 'Hello John!' 	return_stdout=False 	return_rc=True
+Should Be Equal As Integers 	${rc} 	0 	# succeeded 	 
+
+or simply
+
+   ${out}=    Execute Command    export LD_LIBRARY_PATH=/nfs/test:/nfs/lib
+
+ 
+
+1. Add the robot code :
+
+ 
+
+*** Settings ***
+
+Library               SSHLibrary
+Library                String
+Suite setup            Login and Verify Connection
+Suite Teardown         Close All Connections
+
+*** Variable ***
+${USER_ID}       root
+${PASSWORD}      password
+${HOST_IP}        xx.xx.xx.xx
+
+
+*** Testcase ***
+Set-ENV-system
+   [Documentation]         Setting ENV on Server
+
+   Log To Console           \n *** BEFORE SETTING ENV ***
+
+   # Check the Current ENV set on this session
+   ${out}=    Execute Command      env
+   Log To Console        ${out}
+
+   Log To Console         \n *** AFTER SETTING ENV ***
+
+   # Set the ENV and check the Current ENV set on this session
+
+   # Instead of env, you can replace the command and run your target program orscripts etc.
+   ${out}=    Execute Command       export LD_LIBRARY_PATH=/nfs/test && env
+   Log To Console         ${out}
+
+ 
+
+*** Keywords ***
+Login and Verify Connection
+  Open Connection  ${HOST_IP}    prompt=$
+  Login   ${USER_ID}  ${PASSWORD}
+
+ 
+
+2.  Execute robot code 
+
+$ robot setenv.robot
+==============================================================================
+Setenv                                                                        
+==============================================================================
+Set-ENV-system :: Setting ENV on Server                               
+*** BEFORE SETTING ENV ***
+MAIL=/var/mail/root
+USER=root
+HOME=/root
+LOGNAME=root
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+SHELL=/bin/sh
+PWD=/root
+.
+*** AFTER SETTING ENV ***
+MAIL=/var/mail/root
+USER=root
+LD_LIBRARY_PATH=/nfs/test
+HOME=/root
+LOGNAME=root
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+SHELL=/bin/sh
+PWD=/root
+Set-ENV-system :: Setting ENV on Server                               | PASS |
+------------------------------------------------------------------------------
+Setenv                                                                | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+
+ 

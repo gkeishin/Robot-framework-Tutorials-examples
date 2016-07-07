@@ -1,0 +1,54 @@
+le working with REST server on Robot framework Automation ... You end up using urllib/urllib3  packages library to get data in and out.
+
+Probably you'll also end up seeing this messages on the console...  
+This warning are debatable and are there for genuine reason... But for the sake of this topic, we just want to DISABLE that warning message.
+
+WARNING MSG:
+
+InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
+
+
+This seems to have fix post python 2.7.xx but I personally couldn't get it working..  
+So after days of trying setting, installing, configuring.. nothing works out good..
+
+So back to basics...  
+
+We are running a robot code and through tox or pybot.. We can go and disable the code in the package import file but that's not advisable..
+
+The other way is to shadow the message only through python warnings module inside the robot code...
+
+*** Setting ***
+
+Library    disable_warning_urlib.py
+
+ 
+
+where the file   disable_warning_urlib.py   contains code like this
+
+ 
+
+$ cat   disable_warning_urlib.py
+
+ 
+
+#!/usr/bin/python
+import logging
+import warnings
+import httplib
+
+warnings.filterwarnings("ignore")
+
+# Hijack the HTTP lib message and Log only once
+#httplib.HTTPConnection.debuglevel = 0
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.CRITICAL)
+requests_log.propagate = False
+
+class disable_warning_urlib():
+    def do_nothing():
+        return
+
+ 
+
+NOW re run and see that warning and all other possible warning are suppressed for test suite.. 
+

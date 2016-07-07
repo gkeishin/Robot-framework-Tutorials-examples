@@ -1,0 +1,113 @@
+Pramiko is a go to man for SSH ... so after looking around discussion on the internet.. 
+here is a modified and cleaner  code for use on python or via Robot
+
+
+To Get started.. Try this one before starting to code using this library
+
+$ python -c "import paramiko"
+
+If you get no errors you are good to proceed..  This is to check if this package is installed and importable.
+
+Else install it the dependencies..
+
+Example Error you may get..  This means this package has a dependencies on crypto package... 
+it holds good for any import you are doing if using external libraries..
+
+$ python -c "import paramiko"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/rh/python27/root/usr/lib/python2.7/site-packages/paramiko/__init__.py", line 30, in <module>
+    from paramiko.transport import SecurityOptions, Transport
+  File "/opt/rh/python27/root/usr/lib/python2.7/site-packages/paramiko/transport.py", line 32, in <module>
+    from cryptography.hazmat.backends import default_backend
+ImportError: No module named cryptography.hazmat.backends
+
+$
+
+ 
+
+$ cat ssh_lib_connection.py
+import paramiko
+
+class ssh_lib_connection():
+    ##########################################################################
+    # Function : execute_command
+    #
+    # @param   i_cmdStr    : @Command string to be executed
+    # @param   i_hostname  : @Hostname of the HMC
+    # @param   i_user      : @User login name
+    # @param   i_passwd    : @Login secret password
+    # @return  Out put of the command or NONE
+    #
+    # @brief   Robot library wrapper SSH to HMC server and execute commands.
+    #
+    ##########################################################################
+    def execute_command(self, i_cmdStr, i_hostname, i_user, i_passwd):
+        sshObj = paramiko.SSHClient()
+        sshObj.load_system_host_keys()
+        sshObj.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # Connect to Server
+        sshObj.connect(i_hostname, username=i_user, password=i_passwd)
+
+        # Execute the command
+        stdin, stdout, stderr = sshObj.exec_command(i_cmdStr)
+
+        # Build a list to return at the end
+        out_str = list()
+
+        # Chcek if the RC error returned
+        if stdout.channel.recv_exit_status() !=0:
+            out_str.append("Error Returned")
+        else:
+             for line in stdout:
+                 out_str.append(line.strip('\n'))
+
+        # Close the connection
+        sshObj.close()
+        return out_str
+
+
+ 
+
+Now You can call this from your robot code as
+
+$ cat test_ssh_server.robot
+*** Settings ***
+
+Library            ssh_lib_connection.py
+
+*** Variable ***
+${USER_NAME}       root
+${USER_PASSWD}     abc123
+${HOSTNAME}        somehost.server.com # your hostname of server
+${EXECUTE_CMD}     umane -a
+
+*** Testcase ***
+Connect-To-Server-SSH
+   [Documentation]    Connect to Server and Execute command via SSH
+
+   Log To Console     \n Executing ${EXECUTE_CMD} on ${HOSTNAME}
+   ${out} =   Execute Command    ${EXECUTE_CMD}   ${HOSTNAME}  ${USER_NAME}  ${USER_PASSWD}
+   Should Not Contain  ${out}   Error Returned
+   :FOR  ${item}  IN  @{out}
+   \    Log To Console     \n ${item}
+
+ 
+
+$ robot test_ssh_server.robot
+==============================================================================
+Test Ssh Server
+==============================================================================
+Connect-To-Server-SSH :: Connect to Server and Execute command via...
+Executing uname -a on somehost.server.com
+...
+Linux ubuntu 3.13.0-24-generic #47-Ubuntu SMP Fri May 2 23:31:42 UTC 2014 i686 i686 i686 GNU/Linux
+
+"
+Connect-To-Server-SSH :: Connect to Server and Execute command via... | PASS |
+------------------------------------------------------------------------------
+Test Ssh Server                                                       | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

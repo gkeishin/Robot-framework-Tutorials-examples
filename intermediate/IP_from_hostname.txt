@@ -1,0 +1,51 @@
+How to extract IP information from the hostname in Robot..  
+
+There is no direct way for now to do it in robot or selenium framework but here is a quick and easy implementation..
+
+ 
+
+For example in ASM/MENU automation code, all the Robot code works out of the hostname but there may be time when the IP address is needed..
+
+In that context this will work nicely... enjoy
+
+ 
+
+1. Create a Python file :  host_to_ip.py
+
+#!/usr/bin/python
+
+import socket
+
+class host_to_ip(object):
+   def Get_ip_address_from_hostname(self,i_hostname):
+       ip_addr = socket.gethostbyname(i_hostname)
+       return ip_addr
+
+
+2. Write the robot code and import this python file as library
+
+*** Settings ***
+Library      host_to_ip.py
+
+*** Test Cases ****
+Get IP Addr
+     Log To Console   \n hostname: ${HOST_NAME}  
+     ${output} =   Get Ip Address from hostname   ${HOST_NAME}
+     Log To Console   \n IP: ${output}
+
+   
+3. Execute the code
+$ robot  -v HOST_NAME:google.com  host_to_ip.robot 
+==============================================================================
+Host To Ip                                                                    
+==============================================================================
+Get IP Addr                                                           
+hostname: google.com
+..
+IP: 216.58.220.46
+Get IP Addr                                                           | PASS |
+------------------------------------------------------------------------------
+Host To Ip                                                            | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
