@@ -1,0 +1,64 @@
+Sometime you would wish I could have better message posted on Console for failure instead of Robot exception... 
+ 
+
+SYNTAX:
+
+          Keywords     Custom message   values=${TRUE}
+
+
+If you are thinking so, you are looking at the right solution here..
+
+
+Let take and example :  A simple test case to check a string,
+
+*** variables ***
+
+${UNKNOWN}     unknown
+
+*** Test Cases ****
+Generic message on Console
+  Should be Equal   ${UNKNOWN}  OOPS
+
+ 
+
+On Execution :  You'll see a Error message like this... since this is a simple code, its no big deal to understand that this ERROR is thrown from string checking...
+
+Imaging you have a whole lot bunch of test cases then it become extra effort to figure out where it failed in the code..
+
+==============================================================================
+Test                                                                          
+==============================================================================
+Generic message on Console                                            | FAIL |
+unknown != OOPS
+------------------------------------------------------------------------------
+
+ 
+
+Now lets modify the code a bit.. which Robot provide you to do so to add your custom message instead of keywords.. here it is
+
+ 
+
+*** variables ***
+
+${UNKNOWN}     unknown
+
+*** Test Cases ****
+Custom Error message on Console
+  Should be Equal   ${UNKNOWN}  OOPS   This is due to string mismatch  values=${TRUE}
+
+ 
+
+Execute and see the o/p and notice the difference in the FAILURE message
+
+==============================================================================
+Test                                                                          
+==============================================================================
+Custom Error message on Console                                       | FAIL |
+This is due to string mismatch: unknown != OOPS
+------------------------------------------------------------------------------
+
+ 
+
+ 
+
+Pretty cool and neat huh !!!

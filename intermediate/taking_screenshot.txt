@@ -1,0 +1,61 @@
+Selfie time !!!
+
+Capturing the Test data or information in Picture format JPG
+
+Reference :  http://robotframework.org/robotframework/latest/libraries/Screenshot.html
+
+
+This is really helpful when you need proof of the failure or moment when it failed
+
+1. Include the library
+
+*** Settings ***
+Library   Screenshot
+
+2.  Add the code to capture screen shot
+
+*** Settings ***
+Library   Screenshot
+
+*** Variables ***
+# This is your directory where screenshots are needed to be saved.
+${SCREEN_PATH}    ${CURDIR}
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]  Taking Selfie
+   TakeSnapshot
+
+*** Keywords ***
+TakeSnapshot
+  # Set the Directory where to store the screen
+  Set Screenshot Directory     ${SCREEN_PATH}
+
+  # Run something to capture
+  Log To Console      Taking Selfie
+
+  # Capture this
+  Take Screenshot     name=selfie.JPG
+
+
+3. Run the Robot
+ 
+==============================================================================
+Test                                                                          
+==============================================================================
+HelloRobot :: Taking Selfie                                           Taking Selfie
+HelloRobot :: Taking Selfie                                           | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+
+ 
+
+4. The screen shot
+
+rango@ubuntu:~/ROBOT/SCREENSHOT$ ls
+log.html   output.xml  r eport.html  selfie.JPG  test.robot
+
+You can see the *.JPG file of the screen.

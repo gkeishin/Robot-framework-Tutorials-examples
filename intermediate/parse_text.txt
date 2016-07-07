@@ -1,0 +1,56 @@
+Reference :   http://robotframework.org/robotframework/latest/libraries/String.html
+ 
+
+Open a text file and read line by line and print
+
+1. Create a plain text file or use existing
+
+Example :
+
+filename : file.txt
+
+
+hello
+welcome to Robot Testing
+robot gone wild
+
+ 
+
+2. Add the code in robot blue
+
+*** Settings ***
+Library    OperatingSystem
+Library    String
+
+*** Variables ***
+
+${FILE}    file.txt
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]    Parse a text File
+   readTextFile
+
+*** Keywords ***
+readTextFile
+  ${contents}=   Get File   ${FILE}
+  @{lines}=     Split to lines    ${contents}
+  :FOR    ${line}    IN   @{lines}
+  \    Log    ${line}   WARN
+
+ 
+
+3. Execute the Robot code
+
+==============================================================================
+Test                                                                          
+==============================================================================
+[ WARN ] hello                                                                
+[ WARN ] welcome to Robot Testing                                             
+[ WARN ] robot gone wild                                               
+HelloRobot :: Parse a text File                                       | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

@@ -1,0 +1,62 @@
+IF Loops : Conditional Execution of Keywords
+
+
+In the following examples these related Keywords have been used:
+
+    Run Keyword     – Pass in a Keyword in a Variable.
+    Run Keyword If  – Dynamic data checking in line with if/else-like structures.
+    Run Keyword And Ignore Error
+    
+
+SYNTAX :
+
+    Run Keyword     ${TEST_KEYWORD}    Data
+    Run Keyword If  '${USER_DATA}' == 'Data'    Log     Test If statement
+    Run Keyword And Ignore Error    Should Be Empty    ${USER_DATA}
+
+ 
+
+For Else if SYNTAX
+
+ Run Keyword If   $var == 'status'   Log   status is fine   INFO
+...    ELSE IF   $var == 'otherstatus'   Log   other status is fine   INFO
+    
+
+1. Write the robot code
+
+*** Test Cases ***
+Run-Keyword
+    ${USER_KEYWORDS}=    Set Variable    Log
+    Run Keyword    ${USER_KEYWORDS}    Test Data
+
+Run-Keyword-If
+    ${USER_DATA}=    Set Variable    DevsOps
+    Log to Console    ${USER_DATA}
+    Run Keyword If    '${USER_DATA}' == 'DevsOps'        Log To Console    Testing If statement A
+    Run Keyword If    '${USER_DATA}' == 'Traditional'    Log To Console    Testing If statement B
+
+Run-Keyword-Ignore-Error
+    @{USER_DATA}    Create List    Mary  has  a little  lamb
+    Run Keyword And Ignore Error    Should Be Empty    ${USER_DATA}
+    Log To Console     Ignoring Error and continuing
+
+    
+2. Execute robot
+
+robot test.robot
+==============================================================================
+Test                                                                          
+==============================================================================
+Run-Keyword                                                           | PASS |
+------------------------------------------------------------------------------
+Run-Keyword-If                                                        .DevsOps
+.Testing If statement A
+Run-Keyword-If                                                        | PASS |
+------------------------------------------------------------------------------
+Run-Keyword-Ignore-Error                                              ..Ignoring Error and continuing
+Run-Keyword-Ignore-Error                                              | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+3 critical tests, 3 passed, 0 failed
+3 tests total, 3 passed, 0 failed
+==============================================================================

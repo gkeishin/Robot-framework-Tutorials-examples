@@ -1,0 +1,64 @@
+Reference : http://robotframework.org/robotframework/latest/libraries/OperatingSystem.html
+
+Some simple OS command and tricks...
+
+Example:
+
+   - Get OS ENV variable data
+
+   - Get the currentpath
+
+   - List files under directory
+
+   - Executing a file say python file
+
+ 
+1. File : test.robot
+
+*** Settings ***
+Library   OperatingSystem
+
+*** Variables ***
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]    Os simple commands
+   call User Library
+
+*** Keywords ***
+Call User Library
+  # Get the env of HOME path
+  ${homepath}=   Get Environment Variable    HOME
+  Log To Console   ${homepath}
+
+  # Current directory path
+  ${pwd}=   Run  pwd
+  Log To Console   ${pwd}
+
+  # List the files under current dir path with absolute path
+  ${files}=   List Files In Directory   ${pwd}  *.*  absolute
+  Log To Console   ${files}
+
+  # Run the command like we execute on the prompt
+  ${execute}=   Run   ${pwd}/test.py
+  Log To Console    ${execute}
+
+ 
+
+2. Execute Robot
+
+==============================================================================
+Test                                                                          
+==============================================================================
+HelloRobot :: Os simple commands                                        
+
+/home/rango
+/home/rango/ROBOT/OS_syscalls
+[u'/home/rango/ROBOT/OS_syscalls/log.html', u'/home/rango/ROBOT/OS_syscalls/output.xml', u'/home/rango/ROBOT/OS_syscalls/report.html', u'/home/rango/ROBOT/OS_syscalls/test.py', u'/home/rango/ROBOT/OS_syscalls/test.robot']
+Robot Called me !!!
+HelloRobot :: Os simple commands                                      | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

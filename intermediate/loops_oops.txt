@@ -1,0 +1,67 @@
+FOR Loops :
+
+Few of the supporting for loop in framework
+
+    Looping over a list of elements.
+    Looping over a range of numbers.
+
+1. SYNTAX:
+ 
+ :FOR 	${var} 	    IN    @{VALUES}
+
+ :FOR   ${INDEX}     IN RANGE    0    5
+ 
+ :FOR   ${ELEMENT}   IN   @{ITEMS}
+ 
+2.  Robot code
+
+*** Settings ***
+Library           String
+
+*** Test Cases ***
+# Looping in range(0,5)
+For-Loop-In-Range
+    : FOR    ${INDEX}    IN RANGE    0    5
+    \    Log To Console    ${INDEX}
+
+# Looping Element in list
+For-Loop-Elements
+    @{ITEMS}    Create List    IBM      STG     LABS
+    :FOR    ${ELEMENT}    IN    @{ITEMS}
+    \    Log To Console    ${ELEMENT}
+
+# Looping and breaking off
+For-Loop-Exiting
+    @{ITEMS}     Create List     HelloRobot  are you breaking   up with me !!
+    :FOR    ${ELEMENT}    IN    @{ITEMS}
+    \    Log To Console  ${ELEMENT}
+    \    Run Keyword If    '${ELEMENT}' == 'are you breaking'  Exit For Loop
+
+
+3. Execute the robot
+
+robot test.robot
+==============================================================================
+Test                                                                          
+==============================================================================
+For-Loop-In-Range                                                     0
+1
+2
+3
+4
+For-Loop-In-Range                                                     | PASS |
+------------------------------------------------------------------------------
+For-Loop-Elements                                                     .IBM
+STG
+LABS
+For-Loop-Elements                                                     | PASS |
+------------------------------------------------------------------------------
+For-Loop-Exiting                                                      .HelloRobot
+are you breaking
+For-Loop-Exiting                                                      | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+3 critical tests, 3 passed, 0 failed
+3 tests total, 3 passed, 0 failed
+==============================================================================
+

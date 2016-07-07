@@ -1,0 +1,136 @@
+There are few good keywords to work with strings.. Lets try them out .. shall we
+
+
+Lets do the following examples
+
+* Join Two given strings
+* Strip a given strings      ( This is supported from robot framework 3.0 .. sudo pip3 install robotframework --upgrade)
+* Split a given strings
+* Replace a given word in string
+* Match/Search a given Strings
+
+ 
+
+These are the one we would generally use in the coding... Those are generally either in string library or come as built in
+
+-------------------------------------------------------------------------------------------------
+Key Words                   Description
+-------------------------------------------------------------------------------------------------
+Catenate                        Arrange the given items together and returns the resulted string. ( builtin)
+Strip String                    Remove leading and/or trailing whitespaces from the given string.
+Split String                     Splits the string using separator as a delimiter string.
+Replace String              Replaces search_for in the given string with replace_with.
+Get Lines Containing String       Returns lines of the given string that contain the pattern.
+-------------------------------------------------------------------------------------------------
+
+Lets get them rolling in the code
+
+ 
+
+1. Include the string library
+
+Library           String
+
+2. Add the test code
+
+
+*** Settings ***
+Documentation        This one's are direct example from the built/string in lib
+Library                        String
+
+*** Variables ***
+
+${TestString}     Punctuation is important, my teacher said. Without punctuation marks, your writing would be very confusing.
+${SString}          Punctuation
+${ParaString}    This is something. \n
+...               There must be another angle but
+...               this is no way but robo way..\n ah damn
+
+ 
+
+*** Test Cases ***
+JoinTwoStrings
+   ${str1} =     Catenate        WelCome to      IBM DevOps    
+   ${str2} =     Catenate      SEPARATOR=---     Hello     world
+   ${str3} =     Catenate      SEPARATOR=     Hello     world
+   Log To Console      \n ${str1} \n ${str2} \n ${str3}
+
+Strip A Given String
+   Log To Console      \n ${SString}
+   Log To Console      Chars to Strip = Pat
+   ${stripped} =       Strip String    ${SString}     characters=Pat
+   Log To Console      \n ${stripped}
+
+Split A Given String
+   Log To Console     \n " Initial string "
+   Log To Console     \n ${TestString} \n
+   Log To Console     \n " Split a string by spaces by default "
+   @{words} =   Split String    ${TestString}
+   Log To Console     \n ${words}
+
+   Log To Console     \n " Split a string by delitemers"
+   @{words} =   Split String    ${TestString}    ,${SPACE}         
+   Log To Console     \n ${words}
+ 
+Replace A Given String
+   Log To Console     \n ${TestString} \n
+   ${replace}    Set Variable     my teacher said
+   ${replacewith}  Set variable   my damn friend said
+   ${str} =     Replace String     ${TestString}    ${replace}  ${replacewith}
+   Log To Console     \n ${str}
+
+Search or Match A Given String
+   ${needle}   Set Variable     way
+   :: FOR  ${line}  IN   ${ParaString}
+   \    ${lines} =   Get Lines Containing String  ${line}   ${needle}
+   \    Log To Console     \n ${lines}
+
+   
+3. Execute the code
+==============================================================================
+String :: This one's are direct example from the built/string in lib          
+==============================================================================
+JoinTwoStrings                                                        ...
+WelCome to IBM DevOps
+Hello---world
+Helloworld
+JoinTwoStrings                                                        | PASS |
+------------------------------------------------------------------------------
+Strip A Given String                                                  
+Punctuation
+.Chars to Strip = Pat
+..
+unctuation
+Strip A Given String                                                  | PASS |
+------------------------------------------------------------------------------
+Split A Given String                                                  
+" Initial string "
+.
+Punctuation is important, my teacher said. Without punctuation marks, your writing would be very confusing.
+
+.
+" Split a string by spaces by default "
+..
+['Punctuation', 'is', 'important,', 'my', 'teacher', 'said.', 'Without', 'punctuation', 'marks,', 'your', 'writing', 'would', 'be', 'very', 'confusing.']
+.
+" Split a string by delitemers"
+..
+['Punctuation is important', 'my teacher said. Without punctuation marks', 'your writing would be very confusing.']
+Split A Given String                                                  | PASS |
+------------------------------------------------------------------------------
+Replace A Given String                                                
+Punctuation is important, my teacher said. Without punctuation marks, your writing would be very confusing.
+
+....
+Punctuation is important, my damn friend said. Without punctuation marks, your writing would be very confusing.
+Replace A Given String                                                | PASS |
+------------------------------------------------------------------------------
+Search or Match A Given String                                        .
+ There must be another angle but this is no way but robo way..
+Search or Match A Given String                                        | PASS |
+------------------------------------------------------------------------------
+String :: This one's are direct example from the built/string in lib  | PASS |
+5 critical tests, 5 passed, 0 failed
+5 tests total, 5 passed, 0 failed
+==============================================================================
+

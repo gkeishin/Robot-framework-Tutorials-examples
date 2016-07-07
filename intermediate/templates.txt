@@ -1,0 +1,57 @@
+"Test templates" [ http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html ]
+
+Test templates convert normal keyword-driven test cases into data-driven tests. Whereas the body of a keyword-driven test case is constructed from keywords and their possible arguments, test cases with template contain only the arguments for the template keyword. Instead of repeating the same keyword multiple times per test and/or with all tests in a file, it is possible to use it only per test or just once per file.
+
+Template keywords can accept both normal positional and named arguments, as well as arguments embedded to the keyword name.
+Unlike with other settings, it is not possible to define a template using a variable.
+
+Basic usage:
+------------
+
+How a keyword accepting normal positional arguments can be used as a template is illustrated by the following example test cases. These two tests are functionally fully identical.
+
+Lets try to understand with a proper examples :
+
+
+Lets say there are multiple login with multiple credential and we want to connect to it sequentially.
+
+
+*** Settings ***
+Test template    Template Login Example
+
+*** Test cases ***
+Call Template
+    # arg1      agr2           agr3
+    root       root         xyz.hostname  # hostname/IP
+    dev        rootdev      abc.hostname
+
+*** Keywords ***
+Template Login Example
+    [Arguments]  ${username}=  ${password}=  ${server}=
+
+    Log To Console   \n ${username} : ${password} : ${server}
+    Run Keyword If   '${password}' == 'root'        Connect To ServerA
+    ...    ELSE IF   '${password}' == 'rootdev'     Connect To ServerB
+
+Connect To ServerA
+   Log To Console     " Log in to Server A "
+
+Connect To ServerB
+   Log To Console     " Log in to Server B "
+
+   
+==============================================================================
+Template                                                                      
+==============================================================================
+Call Template                                                         
+root : root : xyz.hostname
+" Log in to Server A "
+.
+dev : rootdev : abc.hostname
+" Log in to Server B "
+Call Template                                                         | PASS |
+------------------------------------------------------------------------------
+Template                                                              | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

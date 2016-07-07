@@ -1,0 +1,65 @@
+
+Here is a smart way of avoiding long and error prone IF Else checking in robot code..
+
+   # Suppose you want to check a condition like
+   # if state !=VAR_B and state != Hello and state != example
+   # Here is what you can do more smartly
+   
+    1. Create a list of those words in a list
+    2. Use the keyword  :   Should Not Contain Match   -- or  --   Should Contain Match   
+    3. This key words comes from "Collections"  library
+    
+
+Lets get down to code shall we..
+
+ 
+
+1. Write the code...
+
+*** Settings ***
+# by default built in also have this functionality
+# So with or without Collections lib, it will still work
+
+Library             Collections
+
+*** Variables ***
+
+${VAR_A}     Hello
+${VAR_B}     robot
+${VAR_C}     example
+
+*** Test Cases ***
+Check Multiple Words
+   ${condition} =   Create List  ${VAR_A}  ${VAR_B}  ${VAR_C}
+   
+   Log To Console        \n Condition word List : @{condition}
+ 
+   # Success scenario since no matching in the list
+   Log To Console      \n Success Scenario -> Hello
+   Should Not Contain Match   ${condition}     Hello     case_insensitive=True
+
+   Log To Console      \n Failure Scenario -> robot
+
+   # Failure scenario since its a match in the list
+   Should Not Contain Match     ${condition}       robot     case_insensitive=True
+
+ 
+
+2.  Execute the code
+
+==============================================================================
+List                                                                          
+==============================================================================
+Check Multiple Words                                                  .
+Condition word List : ['Hello', 'robot', 'example']
+.
+Success Scenario -> Hello
+..
+Failure Scenario -> robot
+Check Multiple Words                                                  | FAIL |
+[ Hello | robot | example ] contains match for pattern 'robot'.
+------------------------------------------------------------------------------
+List                                                                  | FAIL |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================

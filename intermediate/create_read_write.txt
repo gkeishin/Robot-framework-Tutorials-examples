@@ -1,0 +1,68 @@
+
+Example to create file, read from file and write to a file.
+
+1. Create a file or use existing file
+Example : file.txt
+
+hello
+welcome to Robot Testing
+robot gone wild
+
+
+2.  This would need the use of OperatingSystem and String Libraries.  ( In Blue )
+
+*** Settings ***
+Library  OperatingSystem
+Library  String
+
+*** Variables ***
+${INPUT_FILE}     file.txt
+${PATH}                  ${CURDIR}/output.txt
+
+*** Test cases ***
+write to file
+  # Create the output file
+  Create File    ${PATH}  
+
+  # Read the INPUT File content
+  ${contents}=   Get File          ${INPUT_FILE}
+  @{lines}=      Split to lines    ${contents}
+
+  # Loop through the lines
+  :FOR     ${line}     IN    @{lines}
+  ...   write to file   ${line}
+
+*** Keywords ***
+write to file
+  [Arguments]  ${variable}
+  Append To File    ${PATH}       ${variable}
+
+  # Since this is a line , if you want to add the next into new line
+  Append To File    ${PATH}     ${\n}
+
+ 
+
+NOTE: Now you see here the Test case name and the keyword is same but it still not complain.. thats because the context of the test case and keyword 
+are different and are local to its use case scope.
+
+
+3. Execute the robot
+ 
+==============================================================================
+Test                                                                          
+==============================================================================
+write to file                                                         | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+
+
+4. File with output.txt is created, and wrote whats read from input the file named file.txt
+
+rango@ubuntu:~/ROBOT/WRITE_TO_FILE$ cat output.txt
+hello
+welcome to Robot Testing
+robot gone wild
+$

@@ -1,0 +1,45 @@
+When you need to set a variable true or false based on condition.. here is what you need to do
+
+In this example, we will check if a variable is equal to 0 and set Boolean True else false
+ 
+
+SYNTAX :
+
+           ${true_or_false}=   Set Variable If  ${count} > 0  ${True}  ${False}
+
+
+1. Robot code
+
+*** Test Cases ***
+Testing True or False
+   ${true_or_false}=  Set Variable If  ${count} > 0 ${True}  ${False}
+   Log To Console   ${true_or_false}
+
+ 
+2. Execute the code
+
+$ robot -v count:1 true_or_false.robot
+==============================================================================
+True Or False
+==============================================================================
+Testing True or False                                                 .True
+Testing True or False                                                 | PASS |
+------------------------------------------------------------------------------
+True Or False                                                         | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+
+ 
+
+$ robot  -v count:0    true_or_false.robot
+==============================================================================
+True Or False
+==============================================================================
+Testing True or False                                                 .False
+Testing True or False                                                 | PASS |
+------------------------------------------------------------------------------
+True Or False                                                         | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

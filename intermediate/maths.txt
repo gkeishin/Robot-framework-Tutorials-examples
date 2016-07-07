@@ -1,0 +1,95 @@
+Let's do some maths...
+
+add, sub, mult, div and some int to hex and back to int conversion
+
+There is nothing much to it, you can refer [ http://robotframework.org/robotframework/latest/libraries/BuiltIn.html ]
+
+The +,-,%,* those are overloaded by the framework so you can directly use as it is for the maths operations..
+
+
+1. Write the test cases
+
+*** Settings ***
+Documentation      Maths as simple as that
+
+*** Variables ***
+${count}               2
+
+${TestData}        3735928559
+
+*** Test cases ***
+Addition
+    Log To Console       \n Before: ${count}
+    ${count}=    Evaluate     ${count} + 1
+    Log To Console      \n After : ${count}
+    Should be equal as numbers      ${count}  3
+
+Subtraction
+    Log To Console      \n Before: ${count}
+    ${count}=    Evaluate    ${count} - 1
+    Log To Console       \n After : ${count}
+    Should be equal as numbers   ${count}  1
+
+Multiply
+    Log To Console      \n Before: ${count}
+    ${count}=    Evaluate   ${count} * 3
+    Log To Console      \n After : ${count}
+    Should be equal as numbers     ${count}  6
+
+Division
+    Log To Console      \n Before: ${count}
+    ${count}=    Evaluate    ${count} / 2
+    Log To Console      \n After : ${count}
+    Should be equal as numbers     ${count}  1
+
+DecimalToHex
+                                              # add 0x prefix to the hex string
+   ${result} =     Convert To Hex      ${TestData}  prefix=0x  length=2
+   Log To Console   \n ${result}
+
+   # Lets convert this to Integer back
+   ${iresult} =  Convert To Integer    ${result}
+   Log To Console    \n ${iresult}
+   Should be equal as numbers    ${iResult}    ${TestData}
+
+
+   2. Execute the Test cases
+   
+rango@ubuntu:~/Desktop/ROBOT/MATHS$ robot maths.robot
+==============================================================================
+Maths :: Maths as simple as that                                              
+==============================================================================
+Addition                                                              
+Before: 2
+..
+After : 3
+Addition                                                              | PASS |
+------------------------------------------------------------------------------
+Subtraction                                                         
+Before: 2
+..
+After : 1
+Subtraction                                                          | PASS |
+------------------------------------------------------------------------------
+Multiply                                                              
+Before: 2
+..
+After : 6
+Multiply                                                              | PASS |
+------------------------------------------------------------------------------
+Division                                                              
+Before: 2
+..
+After : 1
+Division                                                              | PASS |
+------------------------------------------------------------------------------
+DecimalToHex                                                          .
+0xDEADBEEF
+..
+3735928559
+DecimalToHex                                                          | PASS |
+------------------------------------------------------------------------------
+Maths :: Maths as simple as that                                      | PASS |
+5 critical tests, 5 passed, 0 failed
+5 tests total, 5 passed, 0 failed
+==============================================================================

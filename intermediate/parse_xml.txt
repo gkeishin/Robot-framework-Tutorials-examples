@@ -1,0 +1,66 @@
+Reference : http://robotframework.org/robotframework/latest/libraries/XML.html
+
+
+In this test we will try to walk through the XML tree. Validate the parent root and read the text content in the field as
+
+root --> user -->password-->address
+
+1. Create an XML file or use any existing XML if you have
+
+Example : file.xml
+
+<root>
+    <user id="1">robotuser </user>
+    <password id="2">robotpassword</password>
+    <address  id="3">G2 Block </address>
+</root>
+
+
+2.  Add the code in test robot
+
+Import XML ,  declare the variable path to the XML
+Use the Parser to walk and get the data in blue
+
+*** Settings ***
+Library   XML
+
+*** Variables ***
+
+${XML_FILE}   file.xml
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]    User define XML
+   call User Library
+
+*** Keywords ***
+Call User Library
+  # Parse the XML root tag
+  ${root} =     Parse XML   ${XML_FILE}   root
+  Should Be Equal   ${root.tag}    root
+
+  # Walk and Get the child element tag user
+  ${user} =    Get Element     ${root}    user
+  Log To Console   ${user.text}
+
+  ${password} =    Get Element     ${root}    password
+  Log To Console   ${password.text}
+
+  ${address} =    Get Element     ${root}    address
+  Log To Console   ${address.text}
+
+ 
+3. Run the robot test
+==============================================================================
+Test                                                                          
+==============================================================================
+HelloRobot :: User define XML                                         
+robotuser
+robotpassword
+G2 Block
+HelloRobot :: User define XML                                         | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+=============================================================================

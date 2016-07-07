@@ -1,0 +1,121 @@
+Using user define library:
+-------------------------
+
+It so happened that we need to tailor our test code to do some specific task or functionality which robot may not yet support.
+In that no need to worry, write your code in python and just import it as library.
+
+The key is in the naming convention - functions and methods in python should be lowercase and the words should be separated by underscores.
+
+If you follow that convention, robot framework will pick up these keywords and allow you to use them in your tests, however in the tests the 
+words should be separated by spaces, and are case insensitive.
+
+ 
+
+Assume you have a python file with functionalities to perform task.
+
+1. Let create a file named UserLibModule.py
+
+class UserLibModule(object):
+    def util_functioncode(self):
+        return " This is from the User Library"
+
+  
+
+2. Now it's important that the file name and the object class name should be same to make it work.
+The function under the class should be lowercase and separated by underscores as shown above
+
+Execute this to make sure the import is working as intended.
+
+python -c "from UserLibModule import UserLibModule"
+
+3. Add the ROBOT code
+
+*** Settings ***
+Library    UserLibModule.py
+
+4. Call the function utilFunctionCode from the ROBOT code test case 
+
+The code will look like this:
+
+*** Settings ***
+Library   UserLibModule.py
+
+*** Variables ***
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]    User define Library
+   call User Library
+
+*** Keywords ***
+Call User Library
+  # No underscore needed as in the python lib code above
+  ${out}=   util functioncode
+  Log To Console   ${out}
+
+ 
+
+ 5. Run the ROBOT code
+ 
+==============================================================================
+Test                                                                          
+==============================================================================
+HelloRobot :: User define Library                                       This is from the User Library
+HelloRobot :: User define Library                                     | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+
+ 
+
+ 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Now lets extend this to User Library taking arguments. Continuing with the above file example with small changes
+
+File : UserLibModule.py
+
+class UserLibModule(object):
+    def util_functioncode(self,arg1=""):
+        if arg1:
+            return " [%s] This is from the User Library"%arg1
+        else:
+            return " [%s] This is from the User Library"%arg1
+
+ 
+
+ 
+
+File : test.robot
+
+*** Settings ***
+Library   UserLibModule.py
+
+*** Variables ***
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]    User define Library
+   call User Library
+
+*** Keywords ***
+Call User Library
+  ${out}=   util functioncode   2
+  Log To Console   ${out}
+
+ 
+
+==============================================================================
+Test                                                                          
+==============================================================================
+HelloRobot :: User define Library                                      [2] This is from the User Library
+HelloRobot :: User define Library                                     | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

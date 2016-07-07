@@ -1,0 +1,54 @@
+In case when you need to replace or override the variable you have set.. local or global
+ 
+
+SYNTAX :
+
+         ${original_var} =  Replace Variables    New String/value
+
+
+1. The robot code example would look like this
+
+
+*** Settings ***
+
+*** Test Cases ***
+How To override Variables
+  ${original_var} =  Set Variable    abcdefghij
+  Log To Console    \n ORIGINAL: ${original_var}
+
+  ${original_var} =  Replace Variables    ABCDEFGHIJ
+  Log To Console    \n AFTER REPLACED: ${original_var}
+
+  # Set this Var as global
+  Set Suite Variable   ${MY_SUITE_GLOB}     ${original_var}
+
+
+How To override Global Variables
+  Log To Console    \n Suite Global var: ${MY_SUITE_GLOB}
+  ${MY_SUITE_GLOB} =  Replace Variables    abcdefghij
+  Log To Console    \n Suite Global var REPLACE: ${MY_SUITE_GLOB}
+
+ 
+
+2. Execute and check..  
+
+
+$ robot sample.robot
+==============================================================================
+Sample
+==============================================================================
+How To override Variables                                             .
+ORIGINAL: abcdefghij
+..
+AFTER REPLACED: ABCDEFGHIJ
+How To override Variables                                             | PASS |
+------------------------------------------------------------------------------
+How To override Global Variables
+Suite Global var: ABCDEFGHIJ
+..
+Suite Global var REPLACE: abcdefghij
+How To override Global Variables                                      | PASS |
+------------------------------------------------------------------------------
+Sample                                                                | PASS |
+2 critical tests, 2 passed, 0 failed
+2 tests total, 2 passed, 0 failed
