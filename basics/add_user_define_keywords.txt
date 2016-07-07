@@ -1,0 +1,56 @@
+Adding User define Keywords:
+
+You can broadly say, there are two types of keywords.. 
+
+1. Built in Keywords libraries :  meaning that comes with the Robot framework libraries..
+
+Example :
+
+Log ,   Log To Console  etc.. refer  http://robotframework.org/#test-libraries
+
+
+2.  User define Keywords :  This is like a function encompassing few or many keywords
+
+Advance usage of keyword : http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#advanced-features
+
+
+Example : 
+ 
+#--START--
+*** Settings ***
+
+*** Variables ***
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]    Hello Robot
+   Log    " Save this message robot"
+   myfunction
+
+*** Keywords ***
+myfunction
+  Log To Console   "This is my console message"
+
+ 
+#--END--
+
+ 
+
+Th above shows a new user define keyword "myfunction" and inside it we called Built in keyword.. so it can have mix of both..
+
+Execute : robot  test.robot
+
+==============================================================================
+Test                                                                          
+==============================================================================
+HelloRobot :: Hello Robot                                             ."This is my console message"
+HelloRobot :: Hello Robot                                             | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+ 
+
+Refer : http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#creating-user-keywords
+

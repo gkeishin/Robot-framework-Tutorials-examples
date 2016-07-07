@@ -1,0 +1,61 @@
+When your test cases are getting bigger, it is not a wise idea to keep everything in one main file. 
+
+Robot provides mechanism to import the resource and use it.
+
+The higher-level structure of resource files is the same as that of test case files.
+Resource cannot contain Test Cases in the test suite. 
+
+Additionally, setting table in resource files can contain only import settings (Library, Resource, Variables) and Documentation. 
+The Variable  and Keyword table are used exactly the same way as in test case files.
+
+
+1. Create a resource file example myresource.txt ..could be any file type but should follow the above note
+ 
+
+*** Settings ***
+
+*** Variables ***
+
+*** Keywords ***
+myResourceFunction
+  Log To Console   "This is from Resource file"
+
+ 
+
+2.  Import this code from the main() test robot code in BLUE
+
+ 
+
+*** Settings ***
+Resource  myresource.txt
+
+*** Variables ***
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]    Hello Robot
+   Log    " Save this message robot"
+   myfunction
+   myResourceFunction
+
+*** Keywords ***
+myfunction
+  Log To Console   "This is my console message"
+
+ 
+
+3. Execute the robot code
+
+ 
+
+==============================================================================
+Test                                                                          
+==============================================================================
+HelloRobot :: Hello Robot                                             ."This is my console message"
+."This is from Resource file"
+HelloRobot :: Hello Robot                                             | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================

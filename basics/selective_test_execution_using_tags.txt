@@ -1,0 +1,70 @@
+Selective Test Case Execution:
+
+How to run a specific test cases from a test suite using Robot Framework
+
+By default all the test cases in a test suite are executed sequentially. 
+
+
+Example :
+
+A robot test file is called as a Test Suite and the tests inside the code are test cases.
+
+test.robot    <--- This is the test suite
+
+testcase1
+   .........
+
+testcase2
+    .........
+
+The robot command line interface provides the means to select those test case selectively.
+
+
+Example : Test suite robot code
+
+
+*** Settings ***
+
+*** Variables ***
+
+*** Test Cases ***
+TestCase1
+   [Documentation]    Multiple Test cases
+   [Tags]             TestCase1
+   Log To Console   " This is Test Case 1"
+
+TestCase2
+   [Documentation]    Multiple Test cases
+   Log To Console   " This is Test Case 2"
+
+*** Keywords **
+
+ 
+
+Execute the test suite selectivelt :
+
+$ robot    -t   TestCase1     test.robot
+==============================================================================
+Test                                                                          
+==============================================================================
+TestCase1 :: Multiple Test cases                                      " This is Test Case 1"
+TestCase1 :: Multiple Test cases                                      | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+
+ 
+
+$ robot    -t     TestCase2       test.robot
+==============================================================================
+Test                                                                          
+==============================================================================
+TestCase2 :: Multiple Test cases                                      " This is Test Case 2"
+TestCase2 :: Multiple Test cases                                      | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
