@@ -1,0 +1,5 @@
+If you want to use the IDE to write and execute robit code.. 
+
+Follow this installation
+
+https://github.com/robotframework/RIDE/wiki/Installation-Instructions

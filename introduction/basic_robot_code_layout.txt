@@ -1,0 +1,125 @@
+Robot Framework Test suite overview
+
+Divided into four distinct sections
+* Settings
+* Variables
+* Test Cases
+* Keywords
+
+A simple robot code view showing the 4 sections
+
+*** Settings ***
+Library         SSHLibrary
+
+*** Variables ***
+${USERNAME}               rango
+${PASSWORD}               secrete password
+${IP_ADDRESS}             1.2.3.4
+
+*** Test Cases ***
+Login to Server
+    Open Connection            ${IP_ADDRESSS}
+    Login       ${USERNAME}     ${PASSWORD}
+    OS version on server
+
+*** Keywords ***
+OS version on Sever
+    Execute Command                uname -a
+
+
+------------------------
+Decoding the test suite :
+------------------------
+
+If you have done some coding earlier may it be shell, python, C/C++, Java etc... here are the sections taht you could relate to or map.
+
+
+Note : Keyword -> this would be frequently used our discussions ahead. It means that a particular name used in the code is either from 
+                  the framework or from the User resource files.
+
+       Test Suite -> Name given to the file which has the test cases. basically the robot file itself is the "Test Suite"
+
+       Test Case  -> Test written inside the Test suite file
+
+
+Now the 4 main Sections in the code :
+
+*** Settings ***
+
+This is used to import the libraries needed for the test case. Here it show importing Telnet, OS and Selenium Libraries..  etc
+
+Follow syntax Keyword that can be use in *** Settings *** context are Library,Variable, Resource
+
+Example :
+
+*** Settings ***
+
+Library           Telnet 
+Library           OperatingSystem
+Library           Selenium2Library
+Resource          Resource.txt
+Variable          myUserDefineVars.py
+
+ 
+
+
+*** Variables ***
+
+This section is for declaring your local variables to use in the code. Follow the syntax  ${VARIABLE_NAME} 
+
+Example :
+
+*** Variables ***
+${IP_ADDRESS}   xx.AA.yy.BB 
+${USER_ID}      root
+${PASSWORD}     rootxxxxx
+
+ 
+
+*** Test Cases ***
+
+This section is for defining you test case basically the test executor context.  
+The Syntax to follow
+
+TestCaseName  <-- This is your main() test case entry point
+    Test Actions  <-- This is your body of the test where
+
+Example:
+
+*** Test Cases ***
+LoginToRemoteServer
+   [Documentation]   Test to login to remote Sever
+   [Tags]            Executute some commands
+
+ 
+
+*** Keywords ***
+
+This section is for defining your user define keywords. In Robot Keywords are functions which the test case section will call as test action keywords. 
+
+The syntax is same as that of  *** Test Cases ***
+
+Example :
+
+*** Keywords ***
+Open Connection And Log In
+   Open Connection  ${IP_ADDRESS}
+   set prompt       prompt=$    prompt_is_regexp=true
+   Login   ${USER_ID}  ${PASSWORD}
+ 
+
+
+Some other info :
+
+[Documentation]
+    Used for specifying a test case documentation.
+[Tags]
+    Used for tagging test cases.
+[Setup], [Teardown]
+    Specify test setup and teardown.
+[Template]
+    Specifies the template keyword to use. The test itself will contain only data to use as arguments to that keyword.
+[Timeout]
+    Used for setting a test case timeout. Timeouts are discussed in their own section.
+
+** You write this 4 sections in your file and there you go you are ready to start running your ROBOT code..

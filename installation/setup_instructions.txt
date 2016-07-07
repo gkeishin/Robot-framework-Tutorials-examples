@@ -1,0 +1,62 @@
+Robot Framework setup on Linux 
+
+On Ubuntu :
+
+# Use python package management tool pip and it will make most of your installation easier
+
+1.Initial base needed packages
+sudo apt-get install python2.7-dev
+sudo apt-get install python-setuptools
+sudo apt-get install python-pip
+
+2.Installing and Setting up actual robotframework 
+sudo pip install robotframework
+sudo pip install robotframework-seleniumlibrary
+
+3.For those who want to use IDE
+sudo pip install robotframework-ride
+
+4.Installing External Libraries
+sudo pip install robotframework-sshlibrary  
+( For this you may need paramiko,  libffi-dev, cryptography )
+
+Installing/building cryptography:
+
+Cryptography should build very easily on Linux provided you have 
+a) C compiler
+b) headers for Python 
+c) headers for the OpenSSL and 
+d) libffi libraries available on your system.
+
+For Debian and Ubuntu, the following command will ensure that the required dependencies are installed:
+
+sudo apt-get install build-essential libssl-dev libffi-dev python-dev
+
+Post this you should now be able to build and install cryptography with the usual.
+sudo pip install cryptography
+
+5.Good to have goodies
+sudo pip install robotframework-databaselibrary
+sudo apt-get install libmysqlclient-dev
+sudo pip install MySQL-python
+sudo apt-get install openjdk-7-jdk
+
+
+6. If you want to check post installation, use pip list command
+
+$pip list | grep robot
+robotframework (3.0)
+robotframework-databaselibrary (0.8)
+robotframework-httplibrary (0.4.2)
+robotframework-hub (0.9)
+robotframework-python3 (2.9)
+robotframework-requests (0.4.5)
+robotframework-ride (1.5.2.1)
+robotframework-scplibrary (1.1.1)
+robotframework-selenium2library (1.7.4)
+robotframework-seleniumlibrary (2.9.2)
+robotframework-sshlibrary (2.1.2)
+robotframework-xvfb (1.2.2)
+
+
+You can find bunch of information on net if you face issues but all or most is taken here in above step unless there ar other dependencies in your environment.

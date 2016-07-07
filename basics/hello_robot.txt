@@ -1,0 +1,41 @@
+Basic obot program:
+
+1. Create a file example : test.robot
+
+2. Add the bare minimum code:
+
+#--START--
+
+*** Settings ***
+
+*** Variables ***
+
+*** Test Cases ***
+HelloRobot
+   [Documentation]    Hello Robot
+   Log To Console     " print this message robot "
+
+*** Keywords ***
+
+
+#--END--
+
+
+
+3. Save this code and execute test as : robot  test.robot
+
+ 
+==============================================================================
+Test                                                                          
+==============================================================================
+HelloRobot :: Hello Robot                                             " print this message robot "
+HelloRobot :: Hello Robot                                             | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Output:  /home/rango/Robot-framework-Tutorials-examples/basics/output.xml
+Log:     /home/rango/Robot-framework-Tutorials-examples/basics/log.html
+Report:  /home/rango/Robot-framework-Tutorials-examples/basics/report.html
+
