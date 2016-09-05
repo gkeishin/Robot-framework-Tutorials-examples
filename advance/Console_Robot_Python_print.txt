@@ -1,0 +1,52 @@
+
+In case you wrote a python library or kewyword code and you would want to print the python code onto robot output console here is the way
+
+Example: 
+
+Lets write the sample python code
+
+
+-----------------------
+FILE: log_to_console.py
+-----------------------
+
+from robot.libraries.BuiltIn import BuiltIn
+def write_to_console(s):
+  BuiltIn().log_to_console(s)
+
+def do_something():
+  write_to_console("from within python code")
+
+
+Let write the sample robot test code
+
+-----------------------
+FILE: test.robot 
+-----------------------
+
+*** Settings ***
+Library     log_to_console
+
+*** Testcases ***
+Hello logs
+  write_to_console   \n Call from robot log this message to console
+  do something
+
+
+$ python -m robot test.robot 
+==============================================================================
+Test                                                                          
+==============================================================================
+Hello logs                                                            
+Call from robot log this message to console
+.from within python code
+Hello logs                                                            | PASS |
+------------------------------------------------------------------------------
+Test                                                                  | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+
+this is how to use writing to Robot console from python code..
+
+Simple stuff huh
