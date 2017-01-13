@@ -1,0 +1,41 @@
+*** Settings ***
+Documentation   Set Tags per test case in template.
+
+*** Test cases ***
+
+Sample Tags Templates1
+    #user   #mode
+    ABC     ABC
+    [Tags]  Test_ABC_ABC
+    [Template]  Set Tags by Name
+
+
+Sample Tags Templates2
+    #user   #mode
+    XYZ     XYZ
+    [Tags]  Test_XYZ_XYZ
+
+    [Template]  Set Tags by Name
+
+*** Keywords ***
+
+Set Tags by Name
+    [Arguments]  ${user}   ${mode}
+    Log To Console   \n\t Test Case: ${TEST_NAME} \t Test Tag: ${TEST TAGS}
+    
+*** Out put of the sample output ***
+==============================================================================
+Template Tagging :: Set Tags and remove tags in template.                     
+==============================================================================
+Sample Tags Templates1                                                
+	 Test Case: Sample Tags Templates1 	 Test Tag: [u'Test_ABC_ABC']
+Sample Tags Templates1                                                | PASS |
+------------------------------------------------------------------------------
+Sample Tags Templates2                                                
+	 Test Case: Sample Tags Templates2 	 Test Tag: [u'Test_XYZ_XYZ']
+Sample Tags Templates2                                                | PASS |
+------------------------------------------------------------------------------
+Template Tagging :: Set Tags and remove tags in template.             | PASS |
+2 critical tests, 2 passed, 0 failed
+2 tests total, 2 passed, 0 failed
+==============================================================================
