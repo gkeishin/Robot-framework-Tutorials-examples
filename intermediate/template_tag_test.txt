@@ -9,12 +9,10 @@ Sample Tags Templates1
     [Tags]  Test_ABC_ABC
     [Template]  Set Tags by Name
 
-
 Sample Tags Templates2
     #user   #mode
     XYZ     XYZ
     [Tags]  Test_XYZ_XYZ
-
     [Template]  Set Tags by Name
 
 *** Keywords ***
