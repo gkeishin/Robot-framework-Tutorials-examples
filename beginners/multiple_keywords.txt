@@ -1,0 +1,25 @@
+If you are looking for how to execute multiple keywords in a line, here is the simplest thing you can do with using "AND
+
+Example : 
+
+*** Test Cases ***
+Multiple Keywords
+    Run Keywords    foo func first  AND   foo func second
+    
+*** Keywords ***
+foo func first
+   Log To Console  \n first
+
+foo func second
+   Log To Console  \n second
+   
+**** Output ****
+==============================================================================
+Sample                                                                        
+==============================================================================
+Multiple Keywords                                                     
+first
+
+second
+Multiple Keywords                                                     | PASS |
+------------------------------------------------------------------------------
