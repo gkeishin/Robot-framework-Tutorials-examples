@@ -1,0 +1,80 @@
+There are times where we would want to comment a test case or a keyword but not remove from the test suite.
+
+The simplest would be to hash it out but thats not pretty nor good if for a block of test case or keywords.
+
+Robot provides you with a template to hash that out  *** Comments ***
+
+Let me show you with an example:
+
+Say you are commenting the test 2 using hash...
+
+*** Test Cases ***
+test 1
+    Run Keywords    foo func first
+
+#test 2
+#    Run Keywords    foo func second
+
+test 3
+    Run Keywords    foo func third
+    
+*** Keywords ***
+foo func first
+   Log To Console  \n first
+
+foo func second
+   Log To Console  \n second
+   
+foo func third
+   Log To Console  \n third
+Now look at this commenting using *** Comments ***
+
+*** Test Cases ***
+test 1
+    Run Keywords    foo func first
+
+*** Comments ***
+test 2
+    Run Keywords    foo func second
+    
+test 3
+    Run Keywords    foo func third
+
+*** Keywords ***
+foo func first
+   Log To Console  \n first
+
+foo func second
+   Log To Console  \n second
+
+foo func third
+   Log To Console  \n third
+
+
+Pretty neat huh.. but a word of caution.. any test case bellow test 2 will also get commented. To avoid that, 
+you need to follow with the next block with the test case headers as
+
+
+*** Test Cases ***
+test 1
+    Run Keywords    foo func first
+
+*** Comments ***
+test 2
+    Run Keywords    foo func second
+
+*** Test Cases ***
+test 3
+    Run Keywords    foo func third
+
+*** Keywords ***
+foo func first
+   Log To Console  \n first
+
+foo func second
+   Log To Console  \n second
+
+foo func third
+   Log To Console  \n third
+
+Similarly you can do the same for the "user define keywords". 
