@@ -11,6 +11,7 @@ for testcase in suite.testcase_table:
     print "Test Case name:", testcase.name
     # U can do stuff what u need
 
+'''
 --------------- END of CODE ------------------------
 
 O/P: When you execute the script it would look like this.
@@ -23,3 +24,4 @@ Test Case name: Verify Uptime Average Against Threshold
 Test Case name: Test SSH And IPMI Connections
 rango@ubuntu:~/Robot-framework-Tutorials-examples$
     
+'''
