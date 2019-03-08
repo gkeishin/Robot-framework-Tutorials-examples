@@ -1,0 +1,56 @@
+
+DMTF redfish give you a good set of tooling and library to work
+
+Let take https://github.com/DMTF/python-redfish-library
+
+How to use it:
+
+```
+$ pip install redfish
+```
+```
+$ pip list | grep redfish
+redfish                         2.0.5
+```
+
+3 ways you could implement 
+
+1. Use python library in another python and call from robot code
+
+- You could use class inheritance of the redfish class and use directly
+
+Sample Example:
+
+```
+from redfish.rest.v1 import HttpClient
+class redfish_myclass(HttpClient):
+    super(redfish_myclass, self).get, *args, **kwargs)
+```
+
+and call from robot code as   `class object.Get    /redfish/v1`
+
+
+2. Use the request method directly and do GET request but you'll need to
+understand the python request http://docs.python-requests.org/en/master/
+
+Sample Example:
+
+```
+    Create Session  openbmc  https://${host}
+    ${headers}=  Create Dictionary  Content-Type=application/json
+
+    ${data}=  Create Dictionary  UserName=${username}  Password=${password}
+
+    ${resp}=  Post Request  redfish_session
+    ...  /redfish/v1/SessionService/Session  data=${data}  headers=${headers}
+
+    Should Be Equal As Strings  ${resp.status_code}  ${201}
+```	
+
+or 
+
+3. Call directly from robot and use as it is.
+
+But here we will show a simpler robot way you can do
+
+Sample Example:
