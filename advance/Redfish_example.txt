@@ -36,7 +36,7 @@ understand the python request http://docs.python-requests.org/en/master/
 Sample Example:
 
 ```
-    Create Session  openbmc  https://${host}
+    Create Session  redfish_session  https://${host}
     ${headers}=  Create Dictionary  Content-Type=application/json
 
     ${data}=  Create Dictionary  UserName=${username}  Password=${password}
