@@ -1,0 +1,64 @@
+
+Installation:
+```
+pip3 install robotframework-datadriver
+```
+
+Reference:  https://pypi.org/project/robotframework-datadriver/
+Reference Templates : https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#test-templates
+DataDriver gives an alternative to the build in data driven approach to Robot Templates. 
+
+
+Code Example:  Template and Data Driving template mixed in a suite
+
+```
+**** Settings ****
+Documentation    Template vs Data Driver
+
+Test Template    Template Keyword Example
+
+*** Test Cases ***
+
+Test Template Example
+    [Template]  Template Keyword Example
+
+    # Template data
+    1st
+    2nd
+
+
+*** Test Cases ***  ${param}
+
+Test DataDriver Example one   1st
+Test DataDriver Example two   2nd
+
+*** Keywords ***
+
+Template Keyword Example
+    [Arguments]  ${param}
+
+    # Do your operation.
+    Log To Console  Parameter ${param}
+```
+
+```
+
+$ robot test_template_vs_datadriver.robot
+==============================================================================
+Test Template Vs Datadriver :: Template vs Data Driver
+==============================================================================
+Test Template Example                                                 Parameter 1st
+.Parameter 2nd
+Test Template Example                                                 | PASS |
+------------------------------------------------------------------------------
+Test DataDriver Example one                                           Parameter 1st
+Test DataDriver Example one                                           | PASS |
+------------------------------------------------------------------------------
+Test DataDriver Example two                                           Parameter 2nd
+Test DataDriver Example two                                           | PASS |
+------------------------------------------------------------------------------
+Test Template Vs Datadriver :: Template vs Data Driver                | PASS |
+3 tests, 3 passed, 0 failed
+==============================================================================                                        
+
+```
